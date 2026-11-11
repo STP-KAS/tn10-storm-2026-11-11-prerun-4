@@ -160,3 +160,12 @@ These lines are baked into this repo's own pastes. They come from pre-run 3's wo
 ## Locked during pre-run 4
 
 Nothing yet. When a fix works, append it here, one block per fix, in the form shown above: UTC time, what failed, what was changed, why that change stays.
+
+```
+- 2026-11-11T17:14:23Z.
+- What failed: HOLD-1 and HOLD-2 were met. HOLD-3 stayed under the 3,040 offer at about 116,000–118,000 submit-OK a minute (ok-off), the expected desk signing ceiling with three payment senders. The one repair pass killed the payment senders, waited 3 seconds, then called startPay, which skipped any sender still listed in the runner's process list. Dead senders are only dropped from that list every 5 seconds, so none restarted. Minutes after the repair were 0 sent (ok-off, proc-row-missing); two samples also marked the kept nodes unsynced. A git fetch error at 2026-11-11T17:14:23Z blocked the push of counts/desk/HOLD-3.md, the runner logged FAILED and stopped, and a later fetch at 2026-11-11T17:15:50Z also failed, so logs/FAILED.md was not published by the runner. Separately, kept public nodes 1 and 4 were one kaspad reached by two hostnames, so the three kept endpoints were two backends, and no leftover synced public node was free for a bot HOLD-4 send.
+- What was changed: nothing in this repo's run. The operator wrote logs/FAILED.md after the runner was gone. The next repo carries these lines. (a) After a payment-sender repair, startPay must start the missing senders. A process still named in the list is not treated as live until it is reaped, or the repair waits until the list has dropped the dead ones, then starts them. (b) If a push of a HOLD file or of FAILED.md fails, the runner retries, then leaves a local FAILED file and the operator publishes it; a fetch or push error does not leave the run unmarked on origin. (c) Kept public nodes are unique kaspads, not unique hostnames. Two hostnames that are one kaspad count as one node. The bot's leftover node must be a different kaspad, not another hostname of a kept one. If none is free and synced, the bot writes a legal NO SEND.
+- Why that change stays: a repair that stops payment senders and does not start them again ends the load test. A failed git fetch left HOLD-3 and FAILED off origin while the run was already dead. Counting one kaspad twice overstated the kept set and left no honest free node for HOLD-4.
+```
+
+The go files in this repo stay as they were at the start. A next repo copies this page and bakes the new lines into its own pastes.
