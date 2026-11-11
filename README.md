@@ -14,13 +14,27 @@
 
 ## What this measures
 
-The question is what covenants do under different network circumstances: how they behave under congestion, and with competitors on the same network.
+This rehearsal looks at how covenants behave under congestion, and with other senders on the same Testnet-10 network. Some covenants use a basic transaction fee, and some use a priority fee. In part of the load, payment senders also pay an increased fee. Load is added in thirds: one-third, two-thirds, three-thirds, and a four-thirds observation minute if that last step can be held.
 
-Some covenants use a basic transaction fee, and some use a priority fee. In part of the load, senders also pay an increased fee. Load is added in thirds: one-third, two-thirds, three-thirds, and four-thirds if that last step can be held.
+The figures in these repos are rehearsal submit counts from our desk sender log, and Mini's counter. They are not a measure of network inclusion, and they are not a number for Pulse. For a signed one-input, one-output payment, the inclusion ceiling noted in [tn-master](https://github.com/STP-KAS/tn-master) and [what-limits-tx-rate](https://github.com/STP-KAS/what-limits-tx-rate) is about 3,040–3,080 tx/s. HOLD-3, at 3,040, sits on that line. HOLD-4, at 4,053, sits above it for this payment shape. Earlier storms in those notes held higher submit rates with more senders. A count here is what the log said. It is not a broader claim.
 
-## Why this matters
+## Why it is written down
 
-Covenants under load reveal behavior that steady-state testing cannot. The fee-rate differences and the load steps exist to surface that behavior. The playbook of fixes exists so a later run starts from ground that is already known.
+The fee steps and the load steps are there so we can see what happens at each rate, including what breaks. The lock files keep those findings so a later pre-run can start from them. This is a testnet rehearsal. It is not a request to Kaspa core developers.
+
+## Pre-runs in this rehearsal
+
+The rehearsal's top-level what and why is in the [pre-run 2 README](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-2#what-this-measures). Each pre-run is its own repo. The lines below are taken from the count, method, failed, and lock files on origin in those repos. Pre-run 7 is in progress; this table does not describe a result for it.
+
+| Pre-run | Repo | Status | One-line lesson |
+|---|---|---|---|
+| 1 | [tn10-storm-2026-11-11-prerun](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun) | Failed and closed | The desk and Mini reset; nothing was armed for send after that. |
+| 2 | [tn10-storm-2026-11-11-prerun-2](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-2) | HOLD-1 MET (59,767 × 3), then failed | The runner was stopped mid-HOLD-2 to apply a scoring fix; its children died with it. |
+| 3 | [tn10-storm-2026-11-11-prerun-3](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-3) | Failed | The desk runner stopped on a code bug (`readSub is not defined`). |
+| 4 | [tn10-storm-2026-11-11-prerun-4](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-4) | HOLD-1 and HOLD-2 MET, then failed | The HOLD-3 repair started no senders. The operator published the failed file after git fetch errors. |
+| 5 | [tn10-storm-2026-11-11-prerun-5](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-5) | HOLD-1 and HOLD-2 MET; HOLD-3 and RETURN not met | HOLD-3 sat at about 118,000 submit-OK a minute, the 2,000-coin pile cap. Restarted senders reloaded spent coins. The bot wrote a legal `NO SEND` (no free node). |
+| 6 | [tn10-storm-2026-11-11-prerun-6](https://github.com/STP-KAS/tn10-storm-2026-11-11-prerun-6) | HOLD-1 and HOLD-2 MET; HOLD-3 and RETURN not met | The 6,000-coin pile and the fair repair handoff worked (3,002 / 2,998 and 3,000 / 3,000). HOLD-3 sat at 132,439–144,595 a minute; with the larger pile, the likely limit was submit latency on the two public kaspads. The family sender latched off when its node read a mempool of 90,000 or more, so the families stopped and RETURN read not met even though the payments were on target. The bot wrote a legal `NO SEND` (no free node). |
+| 7 | — | In progress | No result is written here. |
 
 ## Sum-up
 
